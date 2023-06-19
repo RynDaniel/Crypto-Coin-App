@@ -1,4 +1,4 @@
-const form = document.querySelector(".top-banner form"); 
+const form = document.querySelector(".top-banner form");
 const input = document.querySelector(".top-banner form input");
 //.class1.class2 <==> .class1 .class2(parent to child)
 const msgSpan = document.querySelector(".top-banner .msg");
@@ -12,7 +12,7 @@ localStorage.setItem("apiKey", EncryptStringAES("coinranking254889bccdb8bff17fa6
 form.addEventListener("submit", (event) => {
     event.preventDefault();
     getCoinDataFromApi();
-    form.reset();
+    event.target.reset();
 });
 
 const getCoinDataFromApi = async () => {
@@ -34,37 +34,40 @@ const getCoinDataFromApi = async () => {
         const response = await axios(url, options);
         console.log(response.data.data.coins[0]);
         //Obj. Destr.
-        const { change, coinrankingUrl, color, iconUrl, name, price, symbol } = response.data.data.coins[0];
+        const { change, iconUrl, name, price, symbol } = response.data.data.coins[0];
         console.log(iconUrl);
 
-        // const coinNames = [...list.querySelectorAll("span")].map(s=>s.innerText);
-        // if(coinNames.includes(name)){
-        //     msgSpan.innerText = `You already know the data for ${name}, Please search for another coin 😉`;
-        //             setInterval(() => {
-        //                 msgSpan.innerText = "";
-        //             }, 3000);
-        //             return;
-        // }
-        ////////////////////////////
+        //querySelectorAll => NodeList
+        //getElementsByClassName => Html Collection
         const coinNameSpans = list.querySelectorAll("span");
-        console.log(coinNameSpans);
-        //forEach ==> array + NodeList
+        //console.log(coinNameSpans);
         if (coinNameSpans.length > 0) {
-            //matching span text with input value??? 
-            const filteredArray = [...coinNameSpans].filter
-                //li span text(from api) <==> name(from api)
-                (span => span.innerText == name);
-            if (filteredArray.length > 0) {
+            const coinNames = [...coinNameSpans].map(s => s.innerText);
+            if (coinNames.includes(name)) {
                 msgSpan.innerText = `You already know the data for ${name}, Please search for another coin 😉`;
                 setInterval(() => {
                     msgSpan.innerText = "";
                 }, 3000);
                 return;
             }
-
         }
-        // const coinNameSpans2 = document.getElementsByClassName(".cities");
-        // console.log(coinNameSpans2);
+
+
+        //forEach ==> array + NodeList
+        // if (coinNameSpans.length > 0) {
+        //     //matching span text with input value??? 
+        //     const filteredArray = [...coinNameSpans].filter
+        //         //li span text(from api) <==> name(from api)
+        //         (span => span.innerText == name);
+        //     if (filteredArray.length > 0) {
+        //         msgSpan.innerText = `You already know the data for ${name}, Please search for another coin 😉`;
+        //         setInterval(() => {
+        //             msgSpan.innerText = "";
+        //         }, 3000);
+        //         return;
+        //     }
+
+        // }
 
         const createdLi = document.createElement("li");
         createdLi.classList.add("coin");
@@ -76,7 +79,7 @@ const getCoinDataFromApi = async () => {
             </h2>
             <div class="coin-temp">$${parseFloat(price).toFixed(8)}</div>
             <figure>
-                <img class="coin-icon" src="${iconUrl}">
+                <img class="coin-icon" src="${iconUrl}">                
                 <figcaption style="color:${change < 0 ? "red" : "green"}">
                     <span><i class="fa-solid fa-chart-line"></i></span>
                     <span>${change}%</span>
@@ -85,12 +88,12 @@ const getCoinDataFromApi = async () => {
             <span class="remove-icon">
                 <i class="fas fa-window-close" style="color:red"></i>
             </span>`;
-            // change < 0
-            // ? createdLi.querySelector("figcaption").style.color = "red"
-            // : createdLi.querySelector("figcaption").style.color = "green";
-            createdLi.querySelector('.remove-icon').addEventListener('click', (event) => {
-                createdLi.remove();
-            });
+        // change < 0
+        // ? createdLi.querySelector("figcaption").style.color = "red"
+        // : createdLi.querySelector("figcaption").style.color = "green";
+        createdLi.querySelector('.remove-icon').addEventListener('click', (event) => {
+            createdLi.remove();
+        });
         //append vs. appendChild
         //append vs. prepend
         list.prepend(createdLi);
