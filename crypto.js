@@ -13,10 +13,11 @@ form.addEventListener("submit", (e)=>{
     e.target.reset();
 });
 
-const getCoinDataFromApi = () =>{
+const getCoinDataFromApi = async() =>{
     //alert("Get Coin Data!!");
     const apiKey = DecryptStringAES(localStorage.getItem("apiKey"));
     //console.log(apiKey);
+    //!!!template literal!!!
     const url = `https://api.coinranking.com/v2/coins?search=${input.value}&limit=1`;
     const options = {
         headers: {
@@ -24,6 +25,40 @@ const getCoinDataFromApi = () =>{
         },
     };
       //fetch vs. axios
+    //   const response = await fetch(url, options)
+    //   .then((response) => response.json())
+    //   .then((result) => console.log(result.data.coins[0]));
+    const response = await axios(url, options);
+    //console.log(response.data.data.coins[0]);
+    //obj. dest.
+    const { price, name, change, iconUrl, symbol } = response.data.data.coins[0];
+    //console.log(iconUrl);
 
+    const createdLi = document.createElement("li");
+    createdLi.classList.add("coin");
+    createdLi.innerHTML = `
+        <h2 class="coin-name" data-name=${name}>
+            <span>${name}</span>
+            <sup>${symbol}</sup>
+        </h2>
+        <div class="coin-temp">$${Number(price).toFixed(6)}</div>
+        <figure>
+            <img class="coin-icon" src=${iconUrl}>                
+            <figcaption style='color:${change < 0 ? "red" : "green"}'>
+                <span><i class="fa-solid fa-chart-line"></i></span>
+                <span>${change}%</span>
+            </figcaption>
+        </figure>
+        <span class="remove-icon">
+            <i class="fas fa-window-close" style="color:red"></i>
+        </span>`;
+        //append vs. prepend
+        //append vs appendChild
+        coinList.prepend(createdLi);
+        //remove func.
+        createdLi.querySelector(".remove-icon").addEventListener("click", ()=>{
+            createdLi.remove();
+        });
+        //
 
 }
