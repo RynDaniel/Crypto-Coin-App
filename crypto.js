@@ -37,8 +37,15 @@ const getCoinDataFromApi = async () => {
         const { change, coinrankingUrl, color, iconUrl, name, price, symbol } = response.data.data.coins[0];
         console.log(iconUrl);
 
-        //querySelectorAll => NodeList
-        //getElementsByClassName => Html Collection
+        // const coinNames = [...list.querySelectorAll("span")].map(s=>s.innerText);
+        // if(coinNames.includes(name)){
+        //     msgSpan.innerText = `You already know the data for ${name}, Please search for another coin 😉`;
+        //             setInterval(() => {
+        //                 msgSpan.innerText = "";
+        //             }, 3000);
+        //             return;
+        // }
+        ////////////////////////////
         const coinNameSpans = list.querySelectorAll("span");
         console.log(coinNameSpans);
         //forEach ==> array + NodeList
@@ -70,14 +77,17 @@ const getCoinDataFromApi = async () => {
             <div class="coin-temp">$${parseFloat(price).toFixed(8)}</div>
             <figure>
                 <img class="coin-icon" src="${iconUrl}">
-                <figcaption>${change}%</figcaption>
+                <figcaption style="color:${change < 0 ? "red" : "green"}">
+                    <span><i class="fa-solid fa-chart-line"></i></span>
+                    <span>${change}%</span>
+                </figcaption>
             </figure>
             <span class="remove-icon">
                 <i class="fas fa-window-close" style="color:red"></i>
             </span>`;
-        createdLi.querySelector("figcaption").innerText.includes("-")
-            ? createdLi.querySelector("figcaption").style.color = "red"
-            : createdLi.querySelector("figcaption").style.color = "green";
+            // change < 0
+            // ? createdLi.querySelector("figcaption").style.color = "red"
+            // : createdLi.querySelector("figcaption").style.color = "green";
             createdLi.querySelector('.remove-icon').addEventListener('click', (event) => {
                 createdLi.remove();
             });
