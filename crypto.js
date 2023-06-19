@@ -1,4 +1,5 @@
-const form = document.querySelector(".top-banner form"); const input = document.querySelector(".top-banner form input");
+const form = document.querySelector(".top-banner form"); 
+const input = document.querySelector(".top-banner form input");
 //.class1.class2 <==> .class1 .class2(parent to child)
 const msgSpan = document.querySelector(".top-banner .msg");
 const list = document.querySelector(".coins");
@@ -87,8 +88,8 @@ const getCoinDataFromApi = async () => {
     }
     catch (error) {
         //error logging
-        //postErrorLog("weather.js", "getWeatherDataFromApi", new Date(), error);
-        msgSpan.innerText = "coin not found!";
+        //postErrorLog("crypto.js", "getCoinDataFromApi", new Date(), error);
+        msgSpan.innerText = "Coin not found!";
         setInterval(() => {
             msgSpan.innerText = "";
         }, 3000);
